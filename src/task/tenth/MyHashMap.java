@@ -7,11 +7,13 @@ public class MyHashMap<K, V> {
     private static final int DEFAULT_INITIAL_CAPACITY = 16;
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
     private int size;
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private Node<K, V>[] entries = new Node[DEFAULT_INITIAL_CAPACITY];
+    private Node<K, V>[] entries;
 
 
     public void put(K key, V value) {
+        if (size == 0){
+            entries = new Node[DEFAULT_INITIAL_CAPACITY];
+        }
         if (checkSize()) {
             grow();
         }
@@ -50,9 +52,8 @@ public class MyHashMap<K, V> {
         return null;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
     private void grow() {
-        Node<K, V>[] temp = (Node<K, V>[]) new Node[2 * entries.length];
+        Node<K, V>[] temp = new Node[2 * entries.length];
         for (int i = 0; i < entries.length; i++) {
             Node<K, V> node = entries[i];
             while (node != null) {
@@ -61,12 +62,12 @@ public class MyHashMap<K, V> {
                     temp[newIndex] = node;
                     node = node.next;
                 } else {
-                    Node<K, V> nodeSecond = temp[newIndex];
-                    while (nodeSecond != null) {
-                        if (nodeSecond.next == null) {
-                            nodeSecond.next = node;
+                    Node<K, V> cuerrentNode = temp[newIndex];
+                    while (cuerrentNode != null) {
+                        if (cuerrentNode.next == null) {
+                            cuerrentNode.next = node;
                         }
-                        nodeSecond = nodeSecond.next;
+                        cuerrentNode = cuerrentNode.next;
                     }
                 }
             }
